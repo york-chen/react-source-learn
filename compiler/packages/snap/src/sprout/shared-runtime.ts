@@ -107,8 +107,9 @@ export function setPropertyByKey<
   return arg;
 }
 
-export function arrayPush<T>(arr: Array<T>, ...values: Array<T>): void {
+export function arrayPush<T>(arr: Array<T>, ...values: Array<T>): Array<T> {
   arr.push(...values);
+  return arr;
 }
 
 export function graphql(value: string): string {
@@ -251,6 +252,9 @@ export function Stringify(props: any): React.ReactElement {
     null,
     toJSON(props, props?.shouldInvokeFns),
   );
+}
+export function Throw() {
+  throw new Error();
 }
 
 export function ValidateMemoization({
