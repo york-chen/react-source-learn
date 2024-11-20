@@ -3,7 +3,7 @@
 ### 简介
 
 使用facebook/react作为上游仓库，在packages里面添加demo工程，构建工程，断点调试来学习react源码
-对react源码做了几处更改，否则本地webpack打包会报错.后续如果react官方代码更新了也可以直接同步过来，不想每次都用npm link，切找不到代码在哪个具体的文件下
+对react源码做了几处更改，否则本地webpack打包会报错.后续如果react官方代码更新了也可以直接同步过来，不想每次都用npm link，且找不到代码在哪个具体的文件下
 
 1.packages->react-reconciler/src/ReactFiberConfig.js
 
@@ -55,7 +55,7 @@ export default ReactSharedInternals;
 
 ---
 ### demo工程简介
-react 使用了flow语法，偷懒也没有单独为这个项目写webpack的配置文件，就把之前的常规配置拿来然后添加了对flow语法的支持而已
+react 使用了flow语法，偷懒就没有单独为这个项目写webpack的配置文件，就把之前的常规配置拿来然后添加了对flow语法的支持而已
 ```
 new webpack.DefinePlugin({
         __DEV__: false,
@@ -81,3 +81,12 @@ new webpack.DefinePlugin({
 
 2.如果使用vscode调试，需要自行填写启动配置，还在完善中
 
+### 同步facebook/react
+
+假如后续react更新了，想要同步看到最新的源代码
+
+1. git remote add upstream git@github.com:facebook/react.git (仅第一次需要)
+
+2. git fetch upstream
+
+3. git pull upstream [branch] 比如我正在研究main分支的源码 那就应该是 `git pull upstream main`
