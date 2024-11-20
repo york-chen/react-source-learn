@@ -1,78 +1,83 @@
-# [React](https://react.dev/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/react) [![(Runtime) Build and Test](https://github.com/facebook/react/actions/workflows/runtime_build_and_test.yml/badge.svg)](https://github.com/facebook/react/actions/workflows/runtime_build_and_test.yml) [![(Compiler) TypeScript](https://github.com/facebook/react/actions/workflows/compiler_typescript.yml/badge.svg?branch=main)](https://github.com/facebook/react/actions/workflows/compiler_typescript.yml) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://legacy.reactjs.org/docs/how-to-contribute.html#your-first-pull-request)
+## react-source-learn
 
-React is a JavaScript library for building user interfaces.
+### 简介
 
-* **Declarative:** React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes. Declarative views make your code more predictable, simpler to understand, and easier to debug.
-* **Component-Based:** Build encapsulated components that manage their own state, then compose them to make complex UIs. Since component logic is written in JavaScript instead of templates, you can easily pass rich data through your app and keep the state out of the DOM.
-* **Learn Once, Write Anywhere:** We don't make assumptions about the rest of your technology stack, so you can develop new features in React without rewriting existing code. React can also render on the server using [Node](https://nodejs.org/en) and power mobile apps using [React Native](https://reactnative.dev/).
+使用facebook/react作为上游仓库，在packages里面添加demo工程，构建工程，断点调试来学习react源码
+对react源码做了几处更改，否则本地webpack打包会报错.后续如果react官方代码更新了也可以直接同步过来，不想每次都用npm link，切找不到代码在哪个具体的文件下
 
-[Learn how to use React in your project](https://react.dev/learn).
+1.packages->react-reconciler/src/ReactFiberConfig.js
 
-## Installation
-
-React has been designed for gradual adoption from the start, and **you can use as little or as much React as you need**:
-
-* Use [Quick Start](https://react.dev/learn) to get a taste of React.
-* [Add React to an Existing Project](https://react.dev/learn/add-react-to-an-existing-project) to use as little or as much React as you need.
-* [Create a New React App](https://react.dev/learn/start-a-new-react-project) if you're looking for a powerful JavaScript toolchain.
-
-## Documentation
-
-You can find the React documentation [on the website](https://react.dev/).
-
-Check out the [Getting Started](https://react.dev/learn) page for a quick overview.
-
-The documentation is divided into several sections:
-
-* [Quick Start](https://react.dev/learn)
-* [Tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
-* [Thinking in React](https://react.dev/learn/thinking-in-react)
-* [Installation](https://react.dev/learn/installation)
-* [Describing the UI](https://react.dev/learn/describing-the-ui)
-* [Adding Interactivity](https://react.dev/learn/adding-interactivity)
-* [Managing State](https://react.dev/learn/managing-state)
-* [Advanced Guides](https://react.dev/learn/escape-hatches)
-* [API Reference](https://react.dev/reference/react)
-* [Where to Get Support](https://react.dev/community)
-* [Contributing Guide](https://legacy.reactjs.org/docs/how-to-contribute.html)
-
-You can improve it by sending pull requests to [this repository](https://github.com/reactjs/react.dev).
-
-## Examples
-
-We have several examples [on the website](https://react.dev/). Here is the first one to get you started:
-
-```jsx
-import { createRoot } from 'react-dom/client';
-
-function HelloMessage({ name }) {
-  return <div>Hello {name}</div>;
-}
-
-const root = createRoot(document.getElementById('container'));
-root.render(<HelloMessage name="Taylor" />);
+将  
+```
+throw new Error('This module must be shimmed by a specific renderer.');
 ```
 
-This example will render "Hello Taylor" into a container on the page.
+更改为  
+```
+export * from './forks/ReactFiberConfig.dom'
+```
 
-You'll notice that we used an HTML-like syntax; [we call it JSX](https://react.dev/learn#writing-markup-with-jsx). JSX is not required to use React, but it makes code more readable, and writing it feels like writing HTML.
+2.packages->react-reconciler/src/Scheduler.js
 
-## Contributing
+将 
+```export const log = Scheduler.log;
+export const unstable_setDisableYieldValue =
+  Scheduler.unstable_setDisableYieldValue;
+```
+  
+更改为 
+```  export const log = SchedulerMock.log;
+export const unstable_setDisableYieldValue =
+SchedulerMock.unstable_setDisableYieldValue;
+``` 
 
-The main purpose of this repository is to continue evolving React core, making it faster and easier to use. Development of React happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving React.
+并且在文件头部添加引用  `import * as SchedulerMock from 'scheduler/unstable_mock'`
 
-### [Code of Conduct](https://code.fb.com/codeofconduct)
+3.packages->shared->ReactSharedInternals.js
 
-Facebook has adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text](https://code.fb.com/codeofconduct) so that you can understand what actions will and will not be tolerated.
+将 
+```import * as React from 'react';
 
-### [Contributing Guide](https://legacy.reactjs.org/docs/how-to-contribute.html)
+const ReactSharedInternals =
+  React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
 
-Read our [contributing guide](https://legacy.reactjs.org/docs/how-to-contribute.html) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to React.
+export default ReactSharedInternals;
+```
 
-### [Good First Issues](https://github.com/facebook/react/labels/good%20first%20issue)
+更改为 
+```import tmp from 'react/src/ReactSharedInternalsClient.js';
 
-To help you get your feet wet and get you familiar with our contribution process, we have a list of [good first issues](https://github.com/facebook/react/labels/good%20first%20issue) that contain bugs that have a relatively limited scope. This is a great place to get started.
+const ReactSharedInternals =
+tmp;
 
-### License
+export default ReactSharedInternals;
+```
 
-React is [MIT licensed](./LICENSE).
+---
+### demo工程简介
+react 使用了flow语法，偷懒也没有单独为这个项目写webpack的配置文件，就把之前的常规配置拿来然后添加了对flow语法的支持而已
+```
+new webpack.DefinePlugin({
+        __DEV__: false,
+        __EXPERIMENTAL__: true,
+        __EXTENSION__: false,
+        __PROFILE__: false,
+        __TEST__: false,
+        // TODO: Should this be feature tested somehow?
+        __IS_CHROME__: false,
+        __IS_FIREFOX__: false,
+        __IS_EDGE__: false,
+        __IS_NATIVE__: false,
+        'process.env': Object.keys(process.env).reduce((env, key) => {
+          env[key] = JSON.stringify(process.env[key]);
+          return env;
+        }, {}),
+      }),
+```
+
+取自react 使用的构建工具rollup的配置中，可自行更改属性值，但是不能缺少
+
+1.如果使用浏览器调试需要打开调试工具设置里面的允许源代码映射
+
+2.如果使用vscode调试，需要自行填写启动配置，还在完善中
+
