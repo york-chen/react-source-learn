@@ -3692,6 +3692,7 @@ function dispatchOptimisticSetState<S, A>(
 }
 
 function isRenderPhaseUpdate(fiber: Fiber): boolean {
+  debugger
   const alternate = fiber.alternate;
   return (
     fiber === currentlyRenderingFiber ||

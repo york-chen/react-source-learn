@@ -227,6 +227,7 @@ function flushSyncWorkAcrossRoots_impl(
 function processRootScheduleInMicrotask() {
   // This function is always called inside a microtask. It should never be
   // called synchronously.
+  debugger
   didScheduleMicrotask = false;
   if (__DEV__) {
     didScheduleMicrotask_act = false;

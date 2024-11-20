@@ -1644,6 +1644,7 @@ function finalizeRender(lanes: Lanes, finalizationTime: number): void {
 }
 
 function prepareFreshStack(root: FiberRoot, lanes: Lanes): Fiber {
+  debugger
   if (enableProfilerTimer && enableComponentPerformanceTrack) {
     // Starting a new render. Log the end of any previous renders and the
     // blocked time before the render started.

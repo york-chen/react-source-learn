@@ -48,6 +48,7 @@ let concurrentQueuesIndex = 0;
 let concurrentlyUpdatedLanes: Lanes = NoLanes;
 
 export function finishQueueingConcurrentUpdates(): void {
+  debugger
   const endIndex = concurrentQueuesIndex;
   concurrentQueuesIndex = 0;
 

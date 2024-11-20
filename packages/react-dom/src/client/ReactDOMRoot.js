@@ -105,7 +105,7 @@ ReactDOMHydrationRoot.prototype.render = ReactDOMRoot.prototype.render =
     if (root === null) {
       throw new Error('Cannot update an unmounted root.');
     }
-
+    debugger
     if (__DEV__) {
       if (typeof arguments[1] === 'function') {
         console.error(

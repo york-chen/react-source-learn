@@ -7,9 +7,9 @@
  * @flow
  */
 
-import * as React from 'react';
+import tmp from 'react/src/ReactSharedInternalsClient.js';
 
 const ReactSharedInternals =
-  React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+tmp;
 
 export default ReactSharedInternals;
