@@ -3120,6 +3120,7 @@ function commitRoot(
   completedRenderStartTime: number, // Profiling-only
   completedRenderEndTime: number, // Profiling-only
 ) {
+  debugger
   // TODO: This no longer makes any sense. We already wrap the mutation and
   // layout phases. Should be able to remove.
   const prevTransition = ReactSharedInternals.T;
@@ -3633,6 +3634,7 @@ function releaseRootPooledCache(root: FiberRoot, remainingLanes: Lanes) {
 }
 
 export function flushPassiveEffects(wasDelayedCommit?: boolean): boolean {
+  debugger
   // Returns whether passive effects were flushed.
   // TODO: Combine this check with the one in flushPassiveEFfectsImpl. We should
   // probably just combine the two functions. I believe they were only separate
